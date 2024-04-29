@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Información de Provincias</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        h2 {
+            margin-top: 20px;
+            color: #666;
+        }
+
+        #provincesData {
+            background-color: #fff;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+
+        p {
+            margin: 0;
+            padding: 5px 0;
+            color: #444;
+        }
+
+        p:first-child {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Información de Provincias</h1>
+    <div id="provincesData">
+        <!-- Aquí se mostrarán los datos de las provincias -->
+    </div>
+
+    <script>
+        // Realizar la solicitud fetch al API de provincias v1
+        fetch('https://www.el-tiempo.net/api/json/v1/provincias')
+            .then(response => response.json()) // Convertir la respuesta a JSON
+            .then(data => {
+                // Manejar los datos recibidos
+                const provincesData = document.getElementById('provincesData');
+                provincesData.innerHTML += '<h2>Provincias (v1)</h2>';
+                data.forEach(province => {
+                    // Mostrar la información de cada provincia
+                    const provinceInfo = document.createElement('p');
+                    provinceInfo.textContent = `Provincia: ${province.NOMBRE_PROVINCIA}, Código: ${province.CODPROV}`;
+
+                    provincesData.appendChild(provinceInfo);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener datos de las provincias (v1):', error);
+            });
+
+        // Realizar la solicitud fetch al API de provincias v2
+        fetch('https://www.el-tiempo.net/api/json/v2/provincias')
+            .then(response => response.json()) // Convertir la respuesta a JSON
+            .then(data => {
+                // Manejar los datos recibidos
+                const provincesData = document.getElementById('provincesData');
+                provincesData.innerHTML += '<h2>Provincias (v2)</h2>';
+                data.provincias.forEach(province => {
+                    // Mostrar la información de cada provincia
+                    const provinceInfo = document.createElement('p');
+                    provinceInfo.textContent = `Provincia: ${province.NOMBRE_PROVINCIA}, Código: ${province.CODPROV}`;
+
+                    provincesData.appendChild(provinceInfo);
+                });
+            })
+            .catch(error => {
+                console.error('Error al obtener datos de las provincias (v2):', error);
+            });
+
+        // Realizar la solicitud fetch al API para obtener información detallada de una provincia específica (código "01")
+        fetch('https://www.el-tiempo.net/api/json/v1/provincias/01')
+            .then(response => response.json()) // Convertir la respuesta a JSON
+            .then(data => {
+                // Manejar los datos recibidos
+                const provinceData = document.createElement('div');
+                provinceData.innerHTML = '<h2>Información detallada de la provincia (Código 01)</h2>';
+                const provinceInfo = document.createElement('p');
+                provinceInfo.textContent = `Nombre: ${data.NOMBRE_PROVINCIA}, Código: ${data.CODPROV}, Comunidad Autónoma: ${data.CODAUTO}`;
+
+                provinceData.appendChild(provinceInfo);
+                document.getElementById('provincesData').appendChild(provinceData);
+            })
+            .catch(error => {
+                console.error('Error al obtener datos de la provincia (código 01):', error);
+            });
+    </script>
+</body>
+</html>
+
+
+
+
